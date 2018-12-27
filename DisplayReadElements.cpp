@@ -1,30 +1,37 @@
 #include "DisplayReadElements.h"
-#include "Cheking.h"
+#include "Cheсking.h"
 
 
-Cheking z2;
-DisplayAndRead c1;
-extern int a[9][9], b[9][9], r[60][2];
+Cheсking z4;
+Display z5;
+extern int a[9][9], b[9][9], r[81][2];
 extern int row, col, icount, mode;
 extern char solh;
 
+using namespace std;
 
-void DisplayAndRead::display()
+void Display::display()
 {
 	int i, j, k, fixed;
-	c1.gotoxy(6, 0);
+	gotoxy(6, 0);
 	for (i = 0; i < 10; i++)
 	{
 		if (i % 3 == 0)
 		{
 			system("color 1");
 			if (i != 0)
+			{
 				printf("\n");
+			}
 			printf("\t\t");
 			for (k = 0; k < 45; k++)
+			{
 				printf("*");
+			}
 			if (i == 9)
+			{
 				goto end;
+			}
 		}
 		if (i % 3 != 0)
 		{
@@ -44,32 +51,46 @@ void DisplayAndRead::display()
 					system("color 1");
 					printf("|");
 					for (k = 0; k < 4; k++)
+					{
 						printf(" ");
+					}
 				}
 				else
 				{
 					system("color 1");
 					printf("| ", a[i][j]);
-					fixed = z2.isfixed(icount, i, j);
+					fixed = z4.isfixed(icount, i, j);
 					if (fixed == 1)
+					{
 						system("color 1");
+					}
 					else
+					{
 						system("color 1");
+					}
 					printf("%d  ", a[i][j]);
 				}
 			}
 			else
 			{
 				if (a[i][j] == 0)
+				{
 					for (k = 0; k < 5; k++)
+					{
 						printf(" ");
+					}
+				}
 				else
 				{
-					fixed = z2.isfixed(icount, i, j);
+					fixed = z4.isfixed(icount, i, j);
 					if (fixed == 1)
+					{
 						system("color 1");
+					}
 					else
+					{
 						system("color 1");
+					}
 					printf("  %d  ", a[i][j]);
 				}
 			}
@@ -79,7 +100,7 @@ void DisplayAndRead::display()
 	}end:;
 }
 
-void DisplayAndRead::gotoxy(int xpos, int ypos)
+void gotoxy(int xpos, int ypos)
 {
 	COORD scrn;
 
@@ -91,17 +112,17 @@ void DisplayAndRead::gotoxy(int xpos, int ypos)
 
 }
 
-void DisplayAndRead::readvalues()
+void Read::readvalues()
 {
 	int i = icount, j, x, y, chek;
 	system("cls");
 	do
 	{
-		display();
+		z5.display();
 		printf("\n");
 	row:
 		printf("\n\nEnter row: ");
-		scanf("%d", &r[i][0]);
+		scanf_s("%d", &r[i][0]);
 		if (r[i][0] == 0)
 		{
 			r[i][0] = 100; r[i][1] = 100;
@@ -116,7 +137,7 @@ void DisplayAndRead::readvalues()
 		}
 	column:
 		printf("Enter column: ");
-		scanf("%d", &r[i][1]);
+		scanf_s("%d", &r[i][1]);
 		if (r[i][1] == 0)
 		{
 			r[i][0] = 100; r[i][1] = 100;
@@ -144,7 +165,7 @@ void DisplayAndRead::readvalues()
 			}
 	scan:
 		printf("Enter the corresponding number: ");
-		scanf("%d", &a[x][y]);
+		scanf_s("%d", &a[x][y]);
 		if (a[x][y] == 0)
 		{
 			for (j = 0; j < icount; j++)
@@ -169,7 +190,7 @@ void DisplayAndRead::readvalues()
 		}
 		else
 		{
-			chek = z2.check(x, y);
+			chek = z4.check(x, y);
 			if (chek == 0)
 			{
 				printf("\nInconsistent number\nEnter again");
