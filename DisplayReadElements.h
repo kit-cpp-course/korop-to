@@ -1,18 +1,23 @@
 #pragma once
 #include "stdafx.h"
 
-
-class DisplayAndRead
+//Class with function needed to read elements
+class Read
 {
 public:
-	
-	/*FUNTION TO READ ELEMENTS*/
+	/*function to read elements from keyboard*/
 	void readvalues();
 
-	/*HELPFUL FUNCTION NEEDED TO WORK WITH GOTOXY*/
-	void gotoxy(int xpos, int ypos);
-
-	/*FUNCTION TO DISPLAY SUDOKU*/
-	static void display();
-	
 };
+
+//class with function needed to display the table of sudoku
+class Display
+{
+public:
+	/*function to display sudoku*/
+	void display();
+
+};
+
+/*helpful function needed to work with gotoxy*/
+void gotoxy(int xpos, int ypos);
