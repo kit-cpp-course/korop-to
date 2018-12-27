@@ -1,16 +1,18 @@
 #pragma once
 #include "stdafx.h"
 
-
-class SolveGenerate
+//class with function needed to solve sudoku	
+class Solve
 {
 public:
-
-	/*FUNCTION TO SOLVE SUDOKU*/
+	/*function to solve sudoku*/
 	int solve();
+};
 
-	/*FUNCTION TO GENERATE SODOKU*/
+//class with fucntion needed to generate sudoku
+class Generate
+{
+public:
+	/*function to solve sudoku*/
 	void generate();
-
-
 };
