@@ -119,90 +119,105 @@ void Read::readvalues()
 	do
 	{
 		z5.display();
-		printf("\n");
-	row:
-		printf("\n\nEnter row: ");
-		scanf_s("%d", &r[i][0]);
-		if (r[i][0] == 0)
-		{
-			r[i][0] = 100; r[i][1] = 100;
-			break;
-		}
-		if (r[i][0] > 10 || r[i][0] < 0)
-		{
-			printf("\nInvalid size\nEnter again");
-			r[i][0] = 20; r[i][1] = 20;
-			getchar();
-			goto row;
-		}
-	column:
-		printf("Enter column: ");
-		scanf_s("%d", &r[i][1]);
-		if (r[i][1] == 0)
-		{
-			r[i][0] = 100; r[i][1] = 100;
-			break;
-		}
-		if (r[i][1] < 0 || r[i][1]>10)
-		{
-			printf("\nInvalid size\nEnter again\n\n");
-			r[i][0] = 20; r[i][1] = 20;
-			getchar();
-			goto column;
-		}
-		r[i][0] = r[i][0] - 1; r[i][1] = r[i][1] - 1;
-		x = r[i][0]; y = r[i][1];
-		if (solh == 'y' || solh == 'Y')
-			for (j = 0; j < icount; j++)
-			{
-				if (x == r[j][0] && y == r[j][1])
-				{
-					printf("This location is fixed and cannot be changed");
-					goto row;
-				}
-				else
-					r[i][0] = 20; r[i][1] = 20;
-			}
-	scan:
-		printf("Enter the corresponding number: ");
-		scanf_s("%d", &a[x][y]);
-		if (a[x][y] == 0)
-		{
-			for (j = 0; j < icount; j++)
-			{
-				if (x == r[j][0] && y == r[j][1])
-				{
-					r[j][0] = 20; r[j][1] = 20;
-					goto end;
-				}
-				if (solh == 'y' || solh == 'Y')
-				{
-					r[i][0] = 20; r[i][1] = 20;
-					goto end;
-				}
-			}
-		}
-		if (a[x][y] > 9 || a[x][y] <= 0)
-		{
-			printf("\nNumber out of range\nEnter again\n\n");
-			a[x][y] = 0;
-			goto scan;
-		}
-		else
-		{
-			chek = z4.check(x, y);
-			if (chek == 0)
-			{
-				printf("\nInconsistent number\nEnter again");
-				a[x][y] = 0; r[i][0] = 20; r[i][1] = 20;
-				goto row;
-			}
-		}
-		if (solh != 'y' && solh != 'Y')
-		{
-			icount++; i++;
-		}
-	end:
-		system("cls");
+		printf("\n");	
+		readrow();
+		readcolumn();
+		readscan();
 	} while (r[i - 1][0] != -1 || r[i - 1][1] != -1);
+}
+
+void Read::readrow()
+{
+	int i = icount;
+	printf("\n\nEnter row: ");
+	scanf_s("%d", &r[i][0]);
+	if (r[i][0] == 0)
+	{
+		r[i][0] = 100; r[i][1] = 100;
+	}
+	if (r[i][0] > 10 || r[i][0] < 0)
+	{
+		printf("\nInvalid size\nEnter again");
+		r[i][0] = 20; r[i][1] = 20;
+		getchar();
+		readrow();
+	}
+
+}
+void Read::readcolumn()
+{
+	int x,j, y = 0;
+	int i = icount; 
+	printf("Enter column: ");
+	scanf_s("%d", &r[i][1]);
+	if (r[i][1] == 0)
+	{
+		r[i][0] = 100; r[i][1] = 100;
+	}
+	if (r[i][1] < 0 || r[i][1]>10)
+	{
+		printf("\nInvalid size\nEnter again\n\n");
+		r[i][0] = 20; r[i][1] = 20;
+		getchar();
+		readcolumn();
+	}
+	r[i][0] = r[i][0] - 1; r[i][1] = r[i][1] - 1;
+	x = r[i][0]; y = r[i][1];
+	if (solh == 'y' || solh == 'Y')
+		for (j = 0; j < icount; j++)
+		{
+			if (x == r[j][0] && y == r[j][1])
+			{
+				printf("This location is fixed and cannot be changed");
+				readrow();
+			}
+			else
+				r[i][0] = 20; r[i][1] = 20;
+		}
+}
+void Read::readscan()
+{
+	int i = icount, j = 0;
+	int x = r[i][0], y = r[i][1];
+	int chek = 0;
+	printf("Enter the corresponding number: ");
+	scanf_s("%d", &a[x][y]);
+	if (a[x][y] == 0)
+	{
+		for (j = 0; j < icount; j++)
+		{
+			if (x == r[j][0] && y == r[j][1])
+			{
+				r[j][0] = 20; r[j][1] = 20;
+				goto end;
+			}
+			if (solh == 'y' || solh == 'Y')
+			{
+				r[i][0] = 20; r[i][1] = 20;
+				goto end;
+			}
+		}
+	}
+	if (a[x][y] > 9 || a[x][y] <= 0)
+	{
+		printf("\nNumber out of range\nEnter again\n\n");
+		a[x][y] = 0;
+		readscan();
+	}
+	else
+	{
+		chek = z4.check(x, y);
+		if (chek == 0)
+		{
+			printf("\nInconsistent number\nEnter again");
+			a[x][y] = 0; r[i][0] = 20; r[i][1] = 20;
+			 readrow();
+		}
+	}
+	if (solh != 'y' && solh != 'Y')
+	{
+		icount++; i++;
+	}
+end:
+	system("cls");
 }
