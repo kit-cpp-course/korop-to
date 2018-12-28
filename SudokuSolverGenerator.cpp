@@ -10,11 +10,25 @@ extern int a[9][9], b[9][9], r[81][2];
 extern int row, col, icount, mode;
 extern char solh;
 
-int Solve::solve()
-{	
-	int  m = 0, n = 0, number, c, fixed;
+int  m = 0, n = 0, number = 0, c = 0, fixed = 0;
+int v, i, z, x, count = 1, fix, error;
+char choice;
 
-mainallot:
+int Solve::solve()
+{
+	mainallot();
+	backadjust();
+	return(1);
+}
+
+void Generate::generate()
+{
+	gen();
+	allot();
+}
+
+int Solve::mainallot()
+{
 	for (m = row; m < 9; m++)
 	{
 		n = col;
@@ -37,13 +51,13 @@ mainallot:
 						{
 							row = m - 1; col = 8;
 							if (row < 0)								return(0);
-							goto backadjust;
+							backadjust();
 						}
 						else
 						{
 							row = m; col = n - 1;
 							if (row < 0 || col < 0)								return(0);
-							goto backadjust;
+							backadjust();
 						}
 					}
 					goto allot;
@@ -55,9 +69,9 @@ mainallot:
 		}
 	}
 	return(1);
-
-backadjust:
-
+}
+int Solve::backadjust()
+{
 	fixed = z6.isfixed(icount, row, col);
 	if (fixed == 0)
 	{
@@ -72,13 +86,13 @@ backadjust:
 			{
 				row--; col = 8;
 				if (row < 0)					return(0);
-				goto backadjust;
+				backadjust();
 			}
 			else
 			{
 				col--;
 				if (col < 0)					return(0);
-				goto backadjust;
+				backadjust();
 			}
 		}
 		c = z6.check(row, col);
@@ -91,13 +105,13 @@ backadjust:
 				row++;
 				if (row > 8)					return(0);
 				col = 0;
-				goto mainallot;
+				mainallot();
 			}
 			else
 			{
 				col++;
 				if (col > 8)					return(0);
-				goto mainallot;
+				mainallot();
 			}
 		}
 	}
@@ -107,27 +121,25 @@ backadjust:
 		{
 			row--; col = 8;
 			if (row < 0)				return(0);
-			goto backadjust;
+			backadjust();
 		}
 		else
 		{
 			col--;
 			if (col < 0)				return(0);
-			goto backadjust;
+			backadjust();
 		}
 	}
+	return(1);
 }
-
-void Generate::generate()
+void Generate::gen()
 {
-	int c, i, m, n, count = 1, fixed, error;
-	char choice;
 generate:
-	for (m = 0; m < 9; m++)
+	for (z = 0; z < 9; z++)
 	{
-		for (n = 0; n < 9; n++)
+		for (x = 0; x < 9;x++)
 		{
-			a[m][n] = 0;
+			a[z][x] = 0;
 		}
 	}
 	for (i = 0; i < 81; i++)
@@ -152,50 +164,53 @@ generate:
 		goto generate;
 	}
 	a[0][0] = 1 + rand() % 8; r[0][0] = 0; r[0][1] = 0;
+}
+void Generate::allot()
+{
 	for (count = 1; count < 10; count++)
 	{
 	choose:
-		m = rand() % 9; n = rand() % 9;
-		fixed = z6.isfixed(icount, m, n);
+		z = rand() % 9; x = rand() % 9;
+		fixed = z6.isfixed(icount, z, x);
 		if (fixed == 1)			goto choose;
-		r[count][0] = m; r[count][1] = n;
+		r[count][0] = z; r[count][1] = x;
 	allot:
 		a[m][n] = 1 + rand() % 9;
-		if (a[m][n] == 0)			goto allot;
-		c = z6.check(m, n);
-		if (c == 0)			goto allot;
+		if (a[z][x] == 0)			goto allot;
+		v = z6.check(m, n);
+		if (v == 0)			goto allot;
 	}
 	icount = count;
 	error = z7.solve();
-	for (m = 0; m < 9; m++)
+	for (z = 0; z < 9; z++)
 	{
-		for (n = 0; n < 9; n++)
+		for (x = 0; x < 9; x++)
 		{
-			b[m][n] = a[m][n];
+			b[z][x] = a[z][x];
 		}
 	}
 	row = 0; col = 0;
 	for (i = 0; i < 81; i++)
 	{
 		r[i][0] = 20; r[i][1] = 20;
-		if (error == 0)			goto generate;
+		if (error == 0)			gen();
 		for (count = 0; count < mode / 2; count++)
 		{
 		choose2:
-			m = rand() % 9; n = rand() % 5;
-			fixed = z6.isfixed(count, m, n);
+			z = rand() % 9; x = rand() % 5;
+			fixed = z6.isfixed(count, z, x);
 			if (fixed == 1)				goto choose2;
-			r[count][0] = m; r[count][1] = n;
-			r[count + mode / 2][0] = 8 - m;
-			r[count + mode / 2][1] = 8 - n;
+			r[count][0] = z; r[count][1] = x;
+			r[count + mode / 2][0] = 8 - z;
+			r[count + mode / 2][1] = 8 - x;
 		}
-		for (m = 0; m < 9; m++)
+		for (z = 0; z < 9; z++)
 		{
-			for (n = 0; n < 9; n++)
+			for (x = 0; x < 9; x++)
 			{
-				fixed = z6.isfixed(mode, m, n);
+				fixed = z6.isfixed(mode, z, x);
 				if (fixed != 1)
-					a[m][n] = 0;
+					a[z][x] = 0;
 			}
 		}
 		icount = mode;
@@ -207,7 +222,7 @@ generate:
 		scanf_s("%c", &solh);
 		if (solh == 'y' || solh == 'Y' || solh == 's' || solh == 'S')			return;
 		getchar();
-		if (solh == 'm' || solh == 'M')			goto generate;
+		if (solh == 'm' || solh == 'M')			gen();
 		exit(0);
 	}
 }
