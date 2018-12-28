@@ -8,6 +8,13 @@ public:
 	/*function to read elements from keyboard*/
 	void readvalues();
 
+	//helpful methods needed for readvalues
+	void readrow();
+
+	void readcolumn();
+
+	void readscan();
+
 };
 
 //class with function needed to display the table of sudoku
